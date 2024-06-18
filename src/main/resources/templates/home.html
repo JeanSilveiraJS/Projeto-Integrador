@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Home</h1>
+<a href="/login/logout">Sair</a>
+
+<a href="/situacao/cadastrar"><button>Cadastrar Situação</button></a>
+<a href="/dispositivo/cadastrar"><button>Cadastrar Dispositivo</button></a>
+<ul>
+    <th:block th:each="situacao : ${situacoes}">
+        <li th:text="${situacao.nome}"></li>
+    </th:block>
+</ul>
+</body>
+</html>
