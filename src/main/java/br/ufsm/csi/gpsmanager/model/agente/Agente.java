@@ -1,5 +1,7 @@
-package br.ufsm.csi.gpsmanager.model;
+package br.ufsm.csi.gpsmanager.model.agente;
 
+import br.ufsm.csi.gpsmanager.model.dispositivo.Dispositivo;
+import br.ufsm.csi.gpsmanager.model.situacao.Situacao;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
