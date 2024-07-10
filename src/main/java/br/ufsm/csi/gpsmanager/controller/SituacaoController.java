@@ -1,10 +1,10 @@
 package br.ufsm.csi.gpsmanager.controller;
 
-import br.ufsm.csi.gpsmanager.model.Situacao;
-import br.ufsm.csi.gpsmanager.model.Usuario;
+import br.ufsm.csi.gpsmanager.model.situacao.Situacao;
+import br.ufsm.csi.gpsmanager.model.situacao.SituacaoUpdater;
 import br.ufsm.csi.gpsmanager.service.SituacaoService;
-import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -20,12 +20,19 @@ public class SituacaoController {
 
     @GetMapping("/cadastrar")
     public String cadastrarSituacao() {
-        return "situacao/cadastrarSituacao";
+        return "situacao/cadastrar";
     }
 
     @PostMapping("/cadastrar")
     public String cadastrarSituacao(@ModelAttribute Situacao situacao) {
         this.service.cadastrar(situacao);
-        return "redirect:/home";
+        return "redirect:/situacao/{situacao.getId()}";
+    }
+
+    @GetMapping("/gerenciar/{id}")
+    public String gerenciarSituacao(@PathVariable Long id, Model model) {
+        //Situacao situacao = this.service.findSituacao(id);
+        //model.addAttribute("situacao", situacao);
+        return "situacao/gerenciar";
     }
 }

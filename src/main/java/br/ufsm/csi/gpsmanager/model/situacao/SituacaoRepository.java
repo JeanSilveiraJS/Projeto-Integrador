@@ -1,5 +1,6 @@
-package br.ufsm.csi.gpsmanager.model;
+package br.ufsm.csi.gpsmanager.model.situacao;
 
+import br.ufsm.csi.gpsmanager.model.usuario.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -1,8 +1,7 @@
 package br.ufsm.csi.gpsmanager.controller;
 
-import br.ufsm.csi.gpsmanager.model.Usuario;
+import br.ufsm.csi.gpsmanager.model.usuario.Usuario;
 import br.ufsm.csi.gpsmanager.service.UsuarioService;
-import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,14 +15,16 @@ public class UsuarioController {
         this.service = service;
     }
 
-    @GetMapping("/cadastro")
+    @GetMapping("/cadastrar")
     public String cadastrarUsuario() {
-        return "cadastro";
+        return "/usuario/cadastrar";
     }
 
     @PostMapping
-    public void cadastrarUsuario(@ModelAttribute Usuario usuario) {
+    public String cadastrarUsuario(@ModelAttribute Usuario usuario) {
         service.cadastrarUsuario(usuario);
+
+        return "redirect:/login";
     }
 
     @GetMapping("/{id}")

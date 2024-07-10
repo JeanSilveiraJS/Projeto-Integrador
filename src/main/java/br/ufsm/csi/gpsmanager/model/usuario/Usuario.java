@@ -1,5 +1,6 @@
-package br.ufsm.csi.gpsmanager.model;
+package br.ufsm.csi.gpsmanager.model.usuario;
 
+import br.ufsm.csi.gpsmanager.model.situacao.Situacao;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;

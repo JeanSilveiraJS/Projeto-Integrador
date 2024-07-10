@@ -1,5 +1,8 @@
-package br.ufsm.csi.gpsmanager.model;
+package br.ufsm.csi.gpsmanager.model.situacao;
 
+import br.ufsm.csi.gpsmanager.model.agente.Agente;
+import br.ufsm.csi.gpsmanager.model.dispositivo.Dispositivo;
+import br.ufsm.csi.gpsmanager.model.usuario.Usuario;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -25,7 +28,7 @@ public class Situacao {
     @ManyToOne
     @JoinColumn(name = "id_usuario")
     private Usuario usuario;
-    private String nome;
+    private String nome; //TODO: Alterar BD - remover unique (criar constraint id_usuario, nome)
     private String descricao;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date data_inicio;
@@ -33,4 +36,14 @@ public class Situacao {
     private Date data_fim;
     @OneToMany(mappedBy = "situacao")
     private List<Agente> agentes;
+
+
+    public void registrarObserversParaDispositivos(SituacaoUpdater updater) {
+        for (Agente agente : agentes) {
+            Dispositivo dispositivo = agente.getDispositivo();
+            if (dispositivo != null) {
+                dispositivo.registerObserver(updater);
+            }
+        }
+    }
 }

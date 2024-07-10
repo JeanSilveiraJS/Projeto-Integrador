@@ -1,8 +1,8 @@
 package br.ufsm.csi.gpsmanager.service;
 
 import br.ufsm.csi.gpsmanager.infra.exceptions.UsuarioJaCadastradoException;
-import br.ufsm.csi.gpsmanager.model.Usuario;
-import br.ufsm.csi.gpsmanager.model.UsuarioRepository;
+import br.ufsm.csi.gpsmanager.model.usuario.Usuario;
+import br.ufsm.csi.gpsmanager.model.usuario.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +41,7 @@ public class UsuarioService {
         }
     }
 
-    public Usuario buscarUsuarioPorIdUsuario(Long id_usuario) {
+    /*public Usuario buscarUsuarioPorIdUsuario(Long id_usuario) {
         return repository.findUsuarioById_usuario(id_usuario);
-    }
+    }*/
 }

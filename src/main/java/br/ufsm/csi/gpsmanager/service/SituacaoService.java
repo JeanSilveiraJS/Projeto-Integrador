@@ -1,8 +1,8 @@
 package br.ufsm.csi.gpsmanager.service;
 
-import br.ufsm.csi.gpsmanager.model.Situacao;
-import br.ufsm.csi.gpsmanager.model.SituacaoRepository;
-import br.ufsm.csi.gpsmanager.model.Usuario;
+import br.ufsm.csi.gpsmanager.model.situacao.Situacao;
+import br.ufsm.csi.gpsmanager.model.situacao.SituacaoRepository;
+import br.ufsm.csi.gpsmanager.model.usuario.Usuario;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 
@@ -27,10 +27,7 @@ public class SituacaoService {
     public List<Situacao> findAllSituacoes(){
         return this.repository.findAll();
     }
-/*
-    public List<Situacao> findByUsuario(Long id){
-        return this.repository.findByUsuario(id);
-    }*/
+
     public List<Situacao> getSituacoesByUsuario(Usuario usuario) {
         return this.repository.findByUsuario(usuario);
     }
