@@ -1,7 +1,6 @@
 package br.ufsm.csi.gpsmanager.controller;
 
-import br.ufsm.csi.gpsmanager.model.Situacao;
-import br.ufsm.csi.gpsmanager.model.Usuario;
+import br.ufsm.csi.gpsmanager.model.situacao.Situacao;
 import br.ufsm.csi.gpsmanager.service.UsuarioService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
@@ -24,11 +23,20 @@ public class DefaultController {
 
     @GetMapping({"/home", "/"})
     public String home(Model model) {
-        if (session.getAttribute("usuario") != null) {
-            model.addAttribute("situacoes", session.getAttribute("situacoes"));
-            return "home";
-        } else {
+        Object idUsuarioObj = session.getAttribute("id_usuario");
+
+        if (idUsuarioObj == null) {
             return "index";
         }
+
+        Long idUsuario = Long.valueOf(idUsuarioObj.toString());
+        List<Situacao> situacoes = usuarioService.buscarUsuario(idUsuario).getSituacoes();
+
+        //List<Dispositivo> dispositivos = new ArrayList<>();
+
+        model.addAttribute("situacoes", situacoes);
+        //model.addAttribute("dispositivos", dispositivos);
+
+        return "home";
     }
 }

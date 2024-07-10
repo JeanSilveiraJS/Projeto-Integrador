@@ -1,6 +1,6 @@
 package br.ufsm.csi.gpsmanager.controller;
 
-import br.ufsm.csi.gpsmanager.model.Usuario;
+import br.ufsm.csi.gpsmanager.model.usuario.Usuario;
 import br.ufsm.csi.gpsmanager.service.UsuarioService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
@@ -21,7 +21,7 @@ public class AutenticacaoController {
 
     @GetMapping
     public String login() {
-        return "login";
+        return "/usuario/login";
     }
 
     @GetMapping("/logout")
@@ -34,8 +34,10 @@ public class AutenticacaoController {
     public String efetuarLogin(@RequestParam("login") String login, @RequestParam("senha") String senha) {
         Usuario usuario = service.autenticarUsuario(login, senha);
         if (usuario != null) {
-            session.setAttribute("situacoes", usuario.getSituacoes());
+            session.setAttribute("logado", true);
+            session.setAttribute("usuario", usuario);
             session.setAttribute("id_usuario", usuario.getId_usuario());
+            session.setAttribute("situacoes", usuario.getSituacoes());
             return "redirect:/home";
         } else {
             return "login";
