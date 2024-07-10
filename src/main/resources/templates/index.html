@@ -3,12 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <!-- Adicionando a CDN do Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 <body>
-<div>
-    <h1>Bem-vindo à nossa aplicação</h1>
-    <a href="/login">Login</a>
-    <a href="/usuario/cadastro">Cadastro</a>
+<div class="container">
+    <div class="jumbotron mt-5">
+        <h1 class="display-4">Bem-vindo!</h1>
+        <p class="lead">Sistema de Rastreamento de Dispositivos Móveis</p>
+        <hr class="my-4">
+        <p>Para continuar, faça login ou cadastre-se.</p>
+        <a class="btn btn-primary btn-lg" href="/login" role="button">Login</a>
+        <a class="btn btn-secondary btn-lg" href="/usuario/cadastrar" role="button">Cadastro</a>
+    </div>
 </div>
 </body>
 </html>

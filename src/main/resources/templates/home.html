@@ -1,19 +1,73 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br" xmlns:th="http://www.w3.org/1999/xlink">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 <body>
-<h1>Home</h1>
-<a href="/login/logout">Sair</a>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/home">Home</a>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/login/logout">Logout</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="container">
+    <div class="row mt-3">
+        <div class="col-md-6 border-right">
+            <h2>Situações</h2>
+            <div class="mb-3">
+                <a href="/situacao/cadastrar" class="btn btn-success">Cadastrar Situação</a>
+            </div>
+            <ul class="list-group border-top pt-3">
+                <li th:each="situacao : ${situacoes}" class="list-group-item mb-3">
+                    <div class="row">
+                        <a th:href="@{'/situacao/gerenciar/' + ${situacao.id_situacao}}" class="col-8 d-flex align-items-center" style="text-decoration: none; color: inherit;">
+                            <img style="max-width: 25%" src="https://th.bing.com/th/id/OIP.4xUwZLLE24q97yTVCkrw1QHaG6?w=623&h=582&rs=1&pid=ImgDetMain" alt="Imagem genérica" class="mr-3">
+                            <div>
+                                <h5 th:text="${situacao.nome}"></h5>
+                                <p th:text="${situacao.descricao}"></p>
+                            </div>
+                        </a>
+                        <div class="col-4 text-right">
+                            <a th:href="@{'/situacao/editar/' + ${situacao.id_situacao}}" class="btn btn-outline-secondary">Editar</a>
+                            <a th:href="@{'/situacao/excluir/' + ${situacao.id_situacao}}" class="btn btn-outline-danger">Excluir</a>
+                        </div>
+                    </div>
+                </li>
 
-<a href="/situacao/cadastrar"><button>Cadastrar Situação</button></a>
-<a href="/dispositivo/cadastrar"><button>Cadastrar Dispositivo</button></a>
-<ul>
-    <th:block th:each="situacao : ${situacoes}">
-        <li th:text="${situacao.nome}"></li>
-    </th:block>
-</ul>
+                <h6 th:unless="${situacoes.size()}">
+                    Não existem situações cadastradas.
+                </h6>
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <h2>Dispositivos</h2>
+            <div class="mb-3">
+                <a href="/dispositivo/cadastrar" class="btn btn-success">Cadastrar Dispositivo</a>
+            </div>
+            <ul class="list-group  border-top pt-3">
+                <li th:each="dispositivo : ${dispositivos}" class="list-group">
+                    <div class="row">
+                        <div class="col-8">
+                            <h5 th:text="${dispositivo.nome}"></h5>
+                            <p th:text="${dispositivo.descricao}"></p>
+                        </div>
+                        <div class="col-4 text">
+                            <a th:href="@{'/dispositivo/editar/' + ${dispositivo.id_dispositivo}}" class="btn btn-outline-secondary">Editar</a>
+                            <a th:href="@{'/dispositivo/excluir/' + ${dispositivo.id_dispositivo}}" class="btn btn-outline-danger">Excluir</a>
+                        </div>
+                    </div>
+                </li>
+                <h6 th:unless="${dispositivos}">
+                    Não existem dispositivos cadastrados.
+                </h6>
+            </ul>
+        </div>
+</div>
 </body>
 </html>
