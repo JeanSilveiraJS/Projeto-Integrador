@@ -26,7 +26,7 @@ public class SituacaoController {
     @PostMapping("/cadastrar")
     public String cadastrarSituacao(@ModelAttribute Situacao situacao) {
         this.service.cadastrar(situacao);
-        return "redirect:/situacao/{situacao.getId()}";
+        return "redirect:/gerenciar/{situacao.getId()}";
     }
 
     @GetMapping("/gerenciar/{id}")
