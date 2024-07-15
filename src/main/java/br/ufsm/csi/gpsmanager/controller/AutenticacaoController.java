@@ -1,46 +1,52 @@
 package br.ufsm.csi.gpsmanager.controller;
 
-import br.ufsm.csi.gpsmanager.model.usuario.Usuario;
+import br.ufsm.csi.gpsmanager.infra.security.TokenServiceJWT;
 import br.ufsm.csi.gpsmanager.service.UsuarioService;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/login")
 public class AutenticacaoController {
+    private final AuthenticationManager manager;
+    private final TokenServiceJWT tokenServiceJWT;
     private final UsuarioService service;
     private final HttpSession session;
 
+    @PostMapping
+    public String efetuarLogin(@RequestParam String login, @RequestParam String senha, RedirectAttributes redirectAttributes) {
 
-    public AutenticacaoController(UsuarioService service, HttpSession session) {
-        this.service = service;
-        this.session = session;
+        try {
+            Authentication autenticado = new UsernamePasswordAuthenticationToken(login, senha);
+            Authentication at = manager.authenticate(autenticado);
+
+            final User user = (User) at.getPrincipal();
+            String token = this.tokenServiceJWT.gerarToken(user);
+
+            session.setAttribute("id_usuario", service.buscarUsuarioPorLogin(login).getId_usuario());
+
+            redirectAttributes.addFlashAttribute("token", token);
+
+            return "redirect:/home";
+        } catch (Exception e) {
+            return "redirect:/login";
+        }
     }
-
 
     @GetMapping
     public String login() {
         return "/usuario/login";
     }
 
-    @GetMapping("/logout")
-    public String logout() {
-        session.invalidate();
-        return "index";
-    }
 
-    @PostMapping
-    public String efetuarLogin(@RequestParam("login") String login, @RequestParam("senha") String senha) {
-        Usuario usuario = service.autenticarUsuario(login, senha);
-        if (usuario != null) {
-            session.setAttribute("logado", true);
-            session.setAttribute("usuario", usuario);
-            session.setAttribute("id_usuario", usuario.getId_usuario());
-            session.setAttribute("situacoes", usuario.getSituacoes());
-            return "redirect:/home";
-        } else {
-            return "login";
-        }
+    private record DadosTokenJWT(String token) {
     }
 }

@@ -24,6 +24,8 @@ public class Usuario {
     private String login;
     @NotNull(message = "Informe uma senha")
     private String senha;
+    //TODO: Implementar a permissão do usuário (remover o hardcode)
+    //private String permissao;
     @OneToMany(mappedBy = "usuario")
     private List<Situacao> situacoes;
 
