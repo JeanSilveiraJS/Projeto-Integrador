@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerenciamento de Situação</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        #map {
+            height: 100vh; /* Use 100% of the screen height */
+            width: 75%; /* Use the rest of the screen width, subtracting the sidebar width */
+            position: absolute;
+            right: 0;
+        }
+        .sidebar {
+            width: 25%;
+            height: 100vh;
+            position: absolute;
+            left: 0;
+            overflow-y: auto;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+    </style>
+    <!-- TODO: Substituir pela chave da API do Google Maps -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=API_KEY" async defer></script>
+    <script>
+        var map;
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: {lat: -34.397, lng: 150.644},
+                zoom: 8
+            });
+        }
+    </script>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/home">Home</a>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/login/logout">Logout</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="sidebar">
+    <h2>Agentes</h2>
+    <ul>
+        <!-- Lista de agentes da situação aqui -->
+    </ul>
+</div>
+<div id="map"></div>
+</body>
+</html>
