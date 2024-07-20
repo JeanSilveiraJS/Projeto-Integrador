@@ -21,6 +21,7 @@ public class AutenticacaoController {
     private final UsuarioService service;
     private final HttpSession session;
 
+
     @PostMapping
     public String efetuarLogin(@RequestParam String login, @RequestParam String senha, RedirectAttributes redirectAttributes) {
 
@@ -31,6 +32,7 @@ public class AutenticacaoController {
             final User user = (User) at.getPrincipal();
             String token = this.tokenServiceJWT.gerarToken(user);
 
+            session.setAttribute("usuario", service.buscarUsuarioPorLogin(login));
             session.setAttribute("id_usuario", service.buscarUsuarioPorLogin(login).getId_usuario());
 
             redirectAttributes.addFlashAttribute("token", token);
@@ -44,6 +46,12 @@ public class AutenticacaoController {
     @GetMapping
     public String login() {
         return "/usuario/login";
+    }
+
+    @GetMapping("/logout")
+    public String logout() {
+        session.invalidate();
+        return "redirect:/";
     }
 
 

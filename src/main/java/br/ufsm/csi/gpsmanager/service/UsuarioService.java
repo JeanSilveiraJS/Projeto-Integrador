@@ -4,16 +4,14 @@ import br.ufsm.csi.gpsmanager.infra.exceptions.UsuarioJaCadastradoException;
 import br.ufsm.csi.gpsmanager.model.usuario.Usuario;
 import br.ufsm.csi.gpsmanager.model.usuario.UsuarioRepository;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class UsuarioService {
     private final UsuarioRepository repository;
-
-
-    public UsuarioService(UsuarioRepository repository) {
-        this.repository = repository;
-    }
 
 
     @Transactional
@@ -21,8 +19,8 @@ public class UsuarioService {
         if (repository.findByLogin(usuario.getLogin()) != null) {
             throw new UsuarioJaCadastradoException(usuario.getLogin());
         }
-        //todo: Criptografar a senha do usuário ANTES de salvar (verificar ao ativar o Spring Security)
-        //usuario.setSenha(new BCryptPasswordEncoder().encode(usuario.getSenha()));
+
+        usuario.setSenha(new BCryptPasswordEncoder().encode(usuario.getSenha()));
         repository.save(usuario);
     }
 
@@ -41,7 +39,7 @@ public class UsuarioService {
         }
     }
 
-    /*public Usuario buscarUsuarioPorIdUsuario(Long id_usuario) {
-        return repository.findUsuarioById_usuario(id_usuario);
-    }*/
+    public Usuario buscarUsuarioPorLogin(String login) {
+        return repository.findByLogin(login);
+    }
 }
