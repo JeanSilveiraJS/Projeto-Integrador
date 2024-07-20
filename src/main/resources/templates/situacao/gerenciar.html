@@ -4,15 +4,17 @@
     <meta charset="UTF-8">
     <title>Gerenciamento de Situação</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    //TODO: Separar arquivos de SCRIPT e ESTILO
     <style>
         #map {
-            height: 100vh; /* Use 100% of the screen height */
-            width: 75%; /* Use the rest of the screen width, subtracting the sidebar width */
+            height: 100vh;
+            width: 70%;
             position: absolute;
             right: 0;
         }
+
         .sidebar {
-            width: 25%;
+            width: 30%;
             height: 100vh;
             position: absolute;
             left: 0;
@@ -21,17 +23,91 @@
             padding: 20px;
         }
     </style>
-    <!-- TODO: Substituir pela chave da API do Google Maps -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=API_KEY" async defer></script>
     <script>
-        var map;
+
+        function formCadastrarAgente() {
+            var formCadastrarAgente = document.getElementById('formCadastrarAgente');
+            var btnFormCadastrarAgente = document.getElementById('btnFormCadastrarAgente');
+
+            if (formCadastrarAgente.style.display === 'none') {
+                formCadastrarAgente.style.display = 'block';
+                btnFormCadastrarAgente.style.display = 'none';
+            } else {
+                formCadastrarAgente.style.display = 'none';
+                btnFormCadastrarAgente.style.display = 'block';
+            }
+        }
+
+        function toggleAgentDetails(agentId) {
+            var detailsDiv = document.getElementById('detalhes_' + agentId);
+            if (detailsDiv.style.display === 'none') {
+                detailsDiv.style.display = 'block';
+            } else {
+                detailsDiv.style.display = 'none';
+            }
+        }
+
+        var ultimaLocalizacao;
+
         function initMap() {
-            map = new google.maps.Map(document.getElementById('map'), {
-                center: {lat: -34.397, lng: 150.644},
-                zoom: 8
-            });
+            var defaultPosition = {lat: -15.7801, lng: -47.9292}; // Posição padrão
+
+            var initializeMap = function (position) {
+                var map = new google.maps.Map(document.getElementById('map'), {
+                    center: position,
+                    zoom: 13,
+                    mapTypeId: 'satellite'
+                });
+
+                document.getElementById('loadingMessage')
+
+                if (localizacoes && localizacoes.length > 0) {
+                    var path = localizacoes.map(function (loc) {
+                        return new google.maps.LatLng(loc.latitude, loc.longitude);
+                    });
+
+                    var polyline = new google.maps.Polyline({
+                        path: path,
+                        strokeColor: '#FF0000',
+                        strokeOpacity: 1.0,
+                        strokeWeight: 2
+                    });
+
+                    polyline.setMap(map);
+
+                    var lastLoc = localizacoes[localizacoes.length - 1];
+                    var lastPosition = {lat: parseFloat(lastLoc.latitude), lng: parseFloat(lastLoc.longitude)};
+                    map.setCenter(lastPosition);
+
+                    var timestamp = new Date(lastLoc.timestamp);
+                    var formattedDate = timestamp.toLocaleDateString('pt-BR') + ' ' + timestamp.toLocaleTimeString('pt-BR');
+
+                    var marker = new google.maps.Marker({
+                        position: lastPosition,
+                        map: map,
+                        title: 'Última Localização: ' + formattedDate // Adiciona a data formatada ao título
+                    });
+                }
+            };
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    var userPosition = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    initializeMap(userPosition);
+                }, function () {
+                    initializeMap(defaultPosition);
+                });
+            } else {
+                initializeMap(defaultPosition);
+            }
         }
     </script>
+    <!-- TODO: Substituir API_KEY pela chave da API do Google Maps -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=API_KEY&callback=initMap"
+            async defer></script>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -45,11 +121,102 @@
     </div>
 </nav>
 <div class="sidebar">
-    <h2>Agentes</h2>
-    <ul>
-        <!-- Lista de agentes da situação aqui -->
+    <h3 class="mb-3">Agentes</h3>
+    <div class="row p-3">
+        <button class="col-12 btn btn-outline-primary mb-2" id="btnFormCadastrarAgente" onclick="formCadastrarAgente()">
+            Cadastrar Agente
+        </button>
+    </div>
+    <div class="p-2 shadow mb-2 border" style="display: none" id="formCadastrarAgente">
+        <form action="/agente" method="post">
+            <h5>Cadastrar Agente</h5>
+            <input type="hidden" name="id_situacao" th:value="${situacao.getId_situacao()}">
+            <div class="form-group">
+                <label for="nome">Nome</label>
+                <input type="text" class="form-control" id="nome" name="nome" required>
+            </div>
+            <div class="form-group">
+                <label for="descricao">Descrição</label>
+                <input type="text" class="form-control" id="descricao" name="descricao" required>
+            </div>
+            <div class="form-group">
+                <label for="tipo">Tipo</label>
+                <select class="form-control" id="tipo" name="tipo" required>
+                    <option value="VEICULO">Veículo</option>
+                    <option value="PESSOA">Pessoa</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="dispositivo">Dispositivo</label>
+                <select class="form-control" id="dispositivo" name="id_dispositivo" required>
+                    <option th:each="dispositivo : ${dispositivos}" th:value="${dispositivo.idDispositivo}"
+                            th:text="${dispositivo.nome}"></option>
+                    <option th:unless="${dispositivos}">Nenhum dispositivo cadastrado</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Cadastrar</button>
+            <button type="button" class="btn btn-secondary" onclick="formCadastrarAgente()">Cancelar</button>
+        </form>
+    </div>
+
+    <div th:unless="${situacao.getAgentes()}" class="alert alert-info mt-2">Nenhum agente cadastrado</div>
+    <ul class="mb-2 list-group">
+        <li th:each="a : ${situacao.getAgentes()}" class="list-group-item">
+            <div class="row">
+                <div class="col-10">
+                    <a th:href="@{'/agente/' + ${a.id_agente}}" style="text-decoration: none; color: inherit;"
+                       class="row">
+                        <div class="col-10">
+                            <h5 th:href="@{'/agente/' + ${a.id_agente}}">[[${a.nome}]]</h5>
+                            <p th:text="${a.getDescricao()}" style="font-size: small"></p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-2 dropdown">
+                    <a href="#" class="dropdown-toggle" id="dropdownMenuLink" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false" style="text-decoration: none; color: inherit;">
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" th:href="@{'/agente/editar/' + ${a.id_agente}}">Editar</a>
+                        <a class="dropdown-item delete-btn"
+                           th:href="@{'/agente/excluir/' + ${a.id_agente}}"
+                           data-id="${a.id_agente}">Excluir</a>
+                    </div>
+                </div>
+                <div th:if="${agente != null and a.id_agente == agente.getId_agente()}" class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${a.nome}">Nome do Agente</h5>
+                            <p class="card-text"><strong>Descrição:</strong> <span th:text="${a.descricao}">Descrição do Agente</span>
+                            </p>
+                            <p class="card-text"><strong>Tipo:</strong> <span th:text="${a.tipo}">Tipo do Agente</span>
+                            </p>
+                            <p class="card-text"><strong>Dispositivo:</strong> <span th:text="${a.dispositivo.nome}">Nome do Dispositivo</span>
+                            </p>
+                            <div th:if="${#lists.isEmpty(a.localizacoes)}" class="alert alert-info" role="alert">
+                                Não há localizações disponíveis para este agente.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
     </ul>
+
 </div>
-<div id="map"></div>
+<div id="map">
+    <div id="loadingMessage" style="height: 100vh; display: flex; justify-content: center; align-items: center;">
+        Carregando mapa...
+    </div>
+    <!-- Mapa -->
+</div>
+
+<script type="text/javascript">
+    var localizacoes = [[${localizacoes}]];
+    initMap()
+</script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>

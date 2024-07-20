@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Cadastro de Situação</title>
+    <title>Cadastro de Dispositivos</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
@@ -21,25 +21,23 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body">
-                    <h3 class="card-title text-center">Cadastro de Situação</h3>
-                    <form action="/situacao/cadastrar" method="post">
+                    <h3 class="card-title text-center">Cadastro de Dispositivos</h3>
+                    <form action="/dispositivo/cadastrar" method="post">
                         <div class="mb-3">
                             <label for="nome" class="form-label">Nome</label>
                             <input type="text" class="form-control" id="nome" name="nome" required>
                         </div>
                         <div class="mb-3">
-                            <label for="descricao" class="form-label">Descrição</label>
-                            <textarea class="form-control" id="descricao" name="descricao" maxlength="255" required></textarea> <!-- Altere esta linha -->
-                        </div>
-                        <div class="mb-3">
-                            <label for="data_inicio" class="form-label">Data de Início</label>
-                            <input type="date" class="form-control" id="data_inicio" name="data_inicio" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="data_fim" class="form-label">Data de Fim</label>
-                            <input type="date" class="form-control" id="data_fim" name="data_fim" required>
+                            <label for="tipo" class="form-label">Tipo</label>
+                            <select class="form-control" id="tipo" name="tipo" required>
+                                <option value="">Selecione</option>
+                                <option value="Pessoal">Pessoal</option>
+                                <option value="Veicular">Veicular</option>
+                                <option value="Multiuso">Multiuso</option>
+                            </select>
                         </div>
                         <button type="submit" class="btn btn-primary">Cadastrar</button>
+                        <a href="/home" class="btn btn-secondary">Cancelar</a>
                     </form>
                 </div>
             </div>

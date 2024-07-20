@@ -18,56 +18,110 @@
 </nav>
 <div class="container">
     <div class="row mt-3">
-        <div class="col-md-6 border-right">
+        <div class="col-md-8 border-right">
             <h2>Situações</h2>
-            <div class="mb-3">
-                <a href="/situacao/cadastrar" class="btn btn-success">Cadastrar Situação</a>
-            </div>
-            <ul class="list-group border-top pt-3">
-                <li th:each="situacao : ${situacoes}" class="list-group-item mb-3">
+            <ul class="list-group border-top p-3" style="background-color: whitesmoke; height: 550px">
+                <div class="row mb-3 pr-3">
+                    <div class="col-10">
+                        <input type="text" class="" placeholder="Pesquisar situações...">
+                    </div>
+                    <div class="col btn btn-outline-secondary">
+                        Pesquisar
+                    </div>
+                </div>
+                <li th:each="situacao : ${situacoes}" class="list-group-item mb-2">
                     <div class="row">
-                        <a th:href="@{'/situacao/gerenciar/' + ${situacao.id_situacao}}" class="col-8 d-flex align-items-center" style="text-decoration: none; color: inherit;">
-                            <img style="max-width: 25%" src="https://th.bing.com/th/id/OIP.4xUwZLLE24q97yTVCkrw1QHaG6?w=623&h=582&rs=1&pid=ImgDetMain" alt="Imagem genérica" class="mr-3">
+                        <a th:href="@{'/situacao/gerenciar/' + ${situacao.id_situacao}}"
+                           class="col-11 d-flex align-items-center" style="text-decoration: none; color: inherit;">
+                            <img style="max-width:25%"
+                                 src="https://th.bing.com/th/id/OIP.4xUwZLLE24q97yTVCkrw1QHaG6?w=623&h=582&rs=1&pid=ImgDetMain"
+                                 alt="Imagem genérica" class="mr-3">
                             <div>
                                 <h5 th:text="${situacao.nome}"></h5>
                                 <p th:text="${situacao.descricao}"></p>
+                                <ul>
+                                    <li>Data de Início: <span
+                                            th:text="${#dates.format(situacao.data_inicio, 'dd/MM/yyyy')}"></span></li>
+                                    <li>Data de Fim: <span
+                                            th:text="${#dates.format(situacao.data_inicio, 'dd/MM/yyyy')}"></span></li>
+                                </ul>
+
                             </div>
                         </a>
-                        <div class="col-4 text-right">
-                            <a th:href="@{'/situacao/editar/' + ${situacao.id_situacao}}" class="btn btn-outline-secondary">Editar</a>
-                            <a th:href="@{'/situacao/excluir/' + ${situacao.id_situacao}}" class="btn btn-outline-danger">Excluir</a>
+                        <div class="col-1 text-right">
+                            <div class="dropdown">
+                                <a class="dropdown-toggle" type="button" id="dropdownMenuButton"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-ellipsis-v"></i> <!-- Substitua com o ícone de sua preferência -->
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" th:href="@{'/situacao/editar/' + ${situacao.id_situacao}}">Editar</a>
+                                    <a class="dropdown-item delete-btn"
+                                       th:href="@{'/situacao/excluir/' + ${situacao.id_situacao}}"
+                                       data-id="${situacao.id_situacao}">Excluir</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </li>
 
-                <h6 th:unless="${situacoes.size()}">
+                <div th:unless="${situacoes.size()}" class="alert alert-info mt-2">
                     Não existem situações cadastradas.
-                </h6>
+                </div>
+
+                <div class="mb-3" style="position: absolute; bottom: 1vh; right: 6vh">
+                    <a href="/situacao/cadastrar" class="btn btn-outline-primary">Criar <span
+                            style="font-size: large">+</span></a>
+                </div>
             </ul>
         </div>
-        <div class="col-md-6">
+        <div class="col-md">
             <h2>Dispositivos</h2>
-            <div class="mb-3">
-                <a href="/dispositivo/cadastrar" class="btn btn-success">Cadastrar Dispositivo</a>
-            </div>
-            <ul class="list-group  border-top pt-3">
-                <li th:each="dispositivo : ${dispositivos}" class="list-group">
+            <ul class="list-group border-top p-2 pt-3" style="height: 550px; background-color: whitesmoke">
+                <div class="row mb-3 pr-3">
+                    <div class="col">
+                        <input type="text" class="" placeholder="Pesquisar situações...">
+                    </div>
+                    <div class="col-3 btn btn-outline-secondary">
+                        Pesquisar
+                    </div>
+                </div>
+                <li th:each="dispositivo : ${dispositivos}" class="list-group-item mb-2">
                     <div class="row">
-                        <div class="col-8">
-                            <h5 th:text="${dispositivo.nome}"></h5>
-                            <p th:text="${dispositivo.descricao}"></p>
+                        <div class="col-10">
+                            <h6 th:text="${dispositivo.nome}"></h6>
+                            <p th:text="${dispositivo.tipo}" style="font-size: 12px"></p>
+                            <p th:text="'ID: ' + ${dispositivo.idDispositivo}" style="font-size: 12px"></p>
                         </div>
-                        <div class="col-4 text">
-                            <a th:href="@{'/dispositivo/editar/' + ${dispositivo.id_dispositivo}}" class="btn btn-outline-secondary">Editar</a>
-                            <a th:href="@{'/dispositivo/excluir/' + ${dispositivo.id_dispositivo}}" class="btn btn-outline-danger">Excluir</a>
+                        <div class="col-1 text">
+                            <div class="dropdown">
+                                <a class="dropdown-toggle" type="button" id="dropdownDispositivos"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="caret-down"></i>
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="dropdownDispositivos">
+                                    <a class="dropdown-item" th:href="@{'/dispositivo/editar/' + ${dispositivo.idDispositivo}}">Editar</a>
+                                    <a class="dropdown-item delete-btn"
+                                       th:href="@{'/dispositivo/excluir/' + ${dispositivo.idDispositivo}}"
+                                       data-id="${dispositivo.idDispositivo}">Excluir</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </li>
                 <h6 th:unless="${dispositivos}">
                     Não existem dispositivos cadastrados.
                 </h6>
+                <div style="position: absolute; right: 4vh; bottom: 2vh">
+                    <a href="/dispositivo/cadastrar" class="btn btn-outline-primary">Cadastrar <span
+                            style="font-size: large">+</span></a>
+                </div>
             </ul>
         </div>
+    </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>
