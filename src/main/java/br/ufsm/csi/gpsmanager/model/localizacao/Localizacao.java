@@ -27,11 +27,11 @@ public class Localizacao {
 
     @Override
     public String toString() {
-        return "Localizacao{" +
-                "dispositivo=" + dispositivo +
-                ", timestamp=" + timestamp +
-                ", latitude=" + latitude +
-                ", longitude=" + longitude +
-                '}';
+        return "{" +
+                "dispositivo=\"" + dispositivo.getIdDispositivo() +
+                "\", timestamp=\"" + timestamp +
+                "\", latitude=\"" + latitude +
+                "\", longitude=\"" + longitude +
+                "\"}";
     }
 }
