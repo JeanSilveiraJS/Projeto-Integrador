@@ -1,12 +1,9 @@
 package br.ufsm.csi.gpsmanager.model.dispositivo;
 
-import br.ufsm.csi.gpsmanager.model.Observer;
-import br.ufsm.csi.gpsmanager.model.Subject;
+import br.ufsm.csi.gpsmanager.model.observer.Observer;
+import br.ufsm.csi.gpsmanager.model.observer.Subject;
 import br.ufsm.csi.gpsmanager.model.localizacao.Localizacao;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,7 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Dispositivo implements Subject {
     @Id
-    private int id_dispositivo;
+    private Long idDispositivo;
     private String nome;
     private String tipo;
 
