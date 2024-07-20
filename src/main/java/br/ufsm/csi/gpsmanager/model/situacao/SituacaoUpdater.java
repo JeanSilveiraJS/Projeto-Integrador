@@ -1,6 +1,6 @@
 package br.ufsm.csi.gpsmanager.model.situacao;
 
-import br.ufsm.csi.gpsmanager.model.Observer;
+import br.ufsm.csi.gpsmanager.model.observer.Observer;
 import br.ufsm.csi.gpsmanager.model.localizacao.Localizacao;
 
 public class SituacaoUpdater implements Observer {

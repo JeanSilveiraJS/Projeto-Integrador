@@ -37,6 +37,14 @@ public class Situacao {
     @OneToMany(mappedBy = "situacao")
     private List<Agente> agentes;
 
+    public List<Agente> getAgentes() {
+        for (Agente agente : agentes) {
+            agente.setSituacao(this);
+            agente.setDispositivo(agente.getDispositivo());
+        }
+        return agentes;
+    }
+
 
     public void registrarObserversParaDispositivos(SituacaoUpdater updater) {
         for (Agente agente : agentes) {
