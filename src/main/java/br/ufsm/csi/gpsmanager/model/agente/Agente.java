@@ -17,7 +17,7 @@ import lombok.Setter;
 public class Agente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_agente;
+    private Long id_agente;
     @ManyToOne
     @JoinColumn(name = "id_situacao")
     private Situacao situacao;
