@@ -1,4 +1,4 @@
-package br.ufsm.csi.gpsmanager.model;
+package br.ufsm.csi.gpsmanager.model.observer;
 
 import br.ufsm.csi.gpsmanager.model.localizacao.Localizacao;
 
